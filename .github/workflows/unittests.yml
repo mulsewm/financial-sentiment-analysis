@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - task-*  
+      - task-*  # Trigger on main and task branches
   pull_request:
     branches:
       - main
@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: ./  
+          path: ./  gs
