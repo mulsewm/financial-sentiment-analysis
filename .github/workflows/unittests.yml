@@ -1,22 +1,45 @@
-name: Python Tests
+name: Python Unit Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - task-*  
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set Up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'  # Set Python version
 
-      - name: Install dependencies
+      # Step 3: Install dependencies
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest  # Explicitly install pytest
 
-      - name: Run tests
+      # Step 4: Run pytest
+      - name: Run Unit Tests
         run: pytest
+
+      # Step 5: Archive test results (optional)
+      - name: Upload Test Results
+        if: always()  # Run even if pytest fails
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ./  
